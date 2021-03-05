@@ -1,0 +1,21 @@
+﻿@using CSharpAdvancedProjectBLL.Models
+
+<EditForm Model="@Position" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Наименование должности :</label>
+        <InputText @bind-Value="@Position.Name" class="form-control" />
+            <ValidationMessage For="@(() => Position.Name)" />
+    </div>
+    <button type="submit" class="btn btn-success">
+        @ButtonSuccessText
+    </button>
+    <a class="btn btn-dark" href="position">@ButtonCancelText</a>
+</EditForm>
+@code {
+    [Parameter] public PositionModel Position { get; set; }
+    [Parameter] public string ButtonSuccessText { get; set; } = "Сохранить";
+    [Parameter] public string ButtonCancelText { get; set; } = "Назад";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}
+

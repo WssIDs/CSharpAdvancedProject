@@ -1,0 +1,46 @@
+﻿@page "/company/edit/{Id:int}"
+@using CSharpAdvancedProjectBLL.Models
+@using CSharpAdvancedProjectBLL.Interfaces
+@inject NavigationManager UriHelper
+@inject ICompanyService CompanyService
+@inject IEmployeeService EmployeeService
+
+<h3>Редактирование</h3>
+<Form Company="@_company" ButtonSuccessText="Изменить" Employees="@_employees" OnValidSubmit="@EditCompany"></Form>
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //try
+        //{
+        var id = Id ?? 0;
+
+        _company = await CompanyService.GetAsync(id);
+        _employees = await GetEmployeesAsync();
+    //}
+    //catch (Exception ex)
+    //{
+
+    //}
+    }
+
+    CompanyModel _company = new CompanyModel();
+
+    async Task EditCompany()
+    {
+
+        await CompanyService.UpdateAsync(_company);
+        UriHelper.NavigateTo("company");
+    }
+
+    IEnumerable<EmployeeModel> _employees;
+
+    private async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
+    {
+        return await EmployeeService.GetAllAsync();
+    }
+}

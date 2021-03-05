@@ -1,0 +1,32 @@
+﻿@page "/company/create"
+@using CSharpAdvancedProjectBLL.Models
+@using CSharpAdvancedProjectBLL.Interfaces
+@inject NavigationManager UriHelper
+@inject ICompanyService CompanyService
+@inject IEmployeeService EmployeeService
+
+<h3>Create</h3>
+<Form Company="@_company" OnValidSubmit="@CreateCompany" Employees="@_employees"></Form>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        _employees = await GetEmployeesAsync();
+    }
+
+    readonly CompanyModel _company = new CompanyModel();
+    async Task CreateCompany()
+    {
+
+        await CompanyService.CreateAsync(_company);
+        UriHelper.NavigateTo("company");
+    }
+
+    IEnumerable<EmployeeModel> _employees;
+
+    private async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
+    {
+        return await EmployeeService.GetAllAsync();
+    }
+}

@@ -1,0 +1,51 @@
+﻿@page "/position/create"
+@using CSharpAdvancedProjectBLL.Models
+@using CSharpAdvancedProjectBLL.Interfaces
+@inject NavigationManager UriHelper
+@inject IPositionService PositionService
+
+<h3>Добавить новую должность</h3>
+
+@if (_isBusy)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <Form Position="@_position" OnValidSubmit="@CreatePosition"></Form>
+
+@if (_createFailed)
+{
+    <br/>
+    <div class="alert alert-danger" role="alert">
+        @_error
+    </div>
+}
+}
+
+@code {
+
+    bool _isBusy;
+    bool _createFailed;
+    string _error;
+    readonly PositionModel _position = new();
+    async Task CreatePosition()
+    {
+        try
+        {
+            _isBusy = true;
+            _createFailed = false;
+            await PositionService.CreateAsync(_position);
+            UriHelper.NavigateTo("position");
+        }
+        catch (Exception ex)
+        {
+            _createFailed = true;
+            _error = ex.GetBaseException().Message;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

@@ -1,0 +1,67 @@
+﻿@page "/employee"
+@using System.Threading
+@using CSharpAdvancedProjectBLL.Interfaces
+@using CSharpAdvancedProjectBLL.Models
+@inject IEmployeeService EmployeeService
+
+<Title Value="Cписок сотрудников"></Title>
+
+<h3>Сотрудники</h3>
+<small>Добавить нового сотрудника в список</small>
+<div class="form-group">
+    <a class="btn btn-success" href="employee/create"><i class="oi oi-plus"></i> Добавить</a>
+</div>
+<br>
+
+@if (Employees == null)
+{
+    <div class="spinner"></div>
+}
+else if (!Employees.Any())
+{
+    <text>Данных нету</text>
+}
+else
+{
+    <TableTemplate Items="Employees" TItem="EmployeeModel">
+        <TableHeader>
+            <th>ID</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Компания</th>
+            <th>Дата приема</th>
+            <th>Должность</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@context.Id</td>
+            <td>@context.Surname</td>
+            <td>@context.FirstName</td>
+            <td>@context.MiddleName</td>
+            <td>@context.Company.Name</td>
+            <td>@context.EmploymentDate</td>
+            <td>@context.Position.Name</td>
+            <td>
+                <a class="btn btn-sm btn-outline-dark" title="Редактировать" href="employee/edit/@context.Id"><i class="oi oi-pencil"></i></a>
+                <a class="btn btn-sm btn-outline-danger" title="Удалить" href="employee/delete/@context.Id"><i class="oi oi-trash"></i></a>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+
+@code
+{
+    private IEnumerable<EmployeeModel> Employees { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetEmployeesAsync();
+    }
+
+    private async Task GetEmployeesAsync()
+    {
+        Employees = await EmployeeService.GetAllAsync();
+    }
+}
+

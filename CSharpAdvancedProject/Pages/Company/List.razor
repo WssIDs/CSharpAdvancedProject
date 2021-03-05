@@ -1,0 +1,63 @@
+﻿@page "/company"
+@using System.Threading
+@using CSharpAdvancedProjectBLL.Interfaces
+@using CSharpAdvancedProjectBLL.Models
+@inject ICompanyService CompanyService
+
+<Title Value="Cписок компаний"></Title>
+
+<h3>Компании</h3>
+<small>Добавить новую компанию в список</small>
+<div class="form-group">
+    <a class="btn btn-success" href="company/create"><i class="oi oi-plus"></i> Добавить</a>
+</div>
+<br>
+
+@if (Companies == null)
+{
+    <div class="spinner"></div>
+}
+else if (!Companies.Any())
+{
+    <text>Данных нету</text>
+}
+else
+{
+    <TableTemplate Items="Companies" TItem="CompanyModel">
+        <TableHeader>
+            <th>Наименование</th>
+            <th>Допустимое кол-во сотрудников</th>
+            <th>Организационно-правовая форма</th>
+            <th>Вид деятельности</th>
+            <th>Кол-во сотрудников</th>
+            <th>Действия</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@context.Name</td>
+            <td>@context.Size</td>
+            <td>@context.LegalForm</td>
+            <td>@context.ActivityType</td>
+            <td>@context.Employees.Count</td>
+            <td>
+                <a class="btn btn-sm btn-outline-dark" title="Редактировать" href="company/edit/@context.Id"><i class="oi oi-pencil"></i></a>
+                <a class="btn btn-sm btn-outline-danger" title="Удалить" href="company/delete/@context.Id"><i class="oi oi-trash"></i></a>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+
+@code
+{
+    private IEnumerable<CompanyModel> Companies { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCompanies();
+    }
+
+    private async Task GetCompanies()
+    {
+        Companies = await CompanyService.GetAllAsync();
+    }
+}

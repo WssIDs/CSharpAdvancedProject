@@ -1,0 +1,46 @@
+﻿@page "/position"
+@using CSharpAdvancedProjectBLL.Interfaces
+@using CSharpAdvancedProjectBLL.Models
+@inject IPositionService PositionService
+
+<Title Value="Cписок должностей"></Title>
+
+<h3>Должности</h3>
+<small>Добавить новую должность в список</small>
+<div class="form-group">
+    <a class="btn btn-success" href="position/create"><i class="oi oi-plus"></i> Добавить</a>
+</div>
+<br>
+
+@if (Positions == null)
+{
+    <div class="spinner"></div>
+}
+else if (!Positions.Any())
+{
+    <text>Данных нету</text>
+}
+else
+{
+    <ul>
+        @foreach (var position in Positions)
+        {
+            <li>@position.Id @position.Name</li>
+        }
+    </ul>
+}
+
+
+@code {
+    private IEnumerable<PositionModel> Positions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetPositions();
+    }
+
+    private async Task GetPositions()
+    {
+        Positions = await PositionService.GetAllAsync();
+    }
+}
