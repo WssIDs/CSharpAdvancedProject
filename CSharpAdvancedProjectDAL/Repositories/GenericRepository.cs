@@ -48,7 +48,7 @@ namespace CSharpAdvancedProjectDAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(int id, TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);
             await _context.SaveChangesAsync();

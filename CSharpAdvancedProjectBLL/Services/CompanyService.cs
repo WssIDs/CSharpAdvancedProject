@@ -43,9 +43,9 @@ namespace CSharpAdvancedProjectBLL.Services
                 .Include(c => c.Employees).ToListAsync());
         }
 
-        public Task UpdateAsync(CompanyModel company)
+        public async Task UpdateAsync(CompanyModel company)
         {
-            throw new NotImplementedException();
+            await _database.Companies.UpdateAsync(_mapper.Map<Company>(company));
         }
 
         public async Task CreateAsync(CompanyModel company)

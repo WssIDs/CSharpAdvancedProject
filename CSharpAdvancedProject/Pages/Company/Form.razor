@@ -10,43 +10,27 @@
             <ValidationMessage For="@(() => Company.Name)" />
         </div>
     </div>
-    <div class="form-group ">
+    <div class="form-group">
+        <label>Максимальное кол-во сотрудников :</label>
         <div>
-            <label>Организационно-правовая форма :</label>
-            <div>
-                <InputText @bind-Value="@Company.LegalForm" />
-                <ValidationMessage For="@(() => Company.LegalForm)" />
-            </div>
+            <InputNumber @bind-Value="@Company.Size" />
+            <ValidationMessage For="@(() => Company.Size)" />
         </div>
     </div>
     <div class="form-group ">
         <div>
-            <button class="btn btn-success" @onclick="@AddEmployee"><i class="oi oi-plus"></i> Добавить сотрудника</button>
-            <label>Сотрудники :</label>
-            <br />
-            @if (Company.Employees != null)
-            {
-                var i = 1;
-                @foreach (var employee in Company.Employees)
-                {
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Сотрудник @i</label>
-                        </div>
-                        <InputSelect @bind-Value="employee.Id" class="form-control" id="inputGroupSelect01">
-                            @foreach (var emp in Employees)
-                            {
-                                <option value="@emp.Id">@emp.FirstName</option>
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => employee.Id)"/>
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" @onclick="@(e => RemoveEmployee(e, employee))"><i class="oi oi-delete"></i></button>
-                        </div>
-                    </div>
-                    i++;
-                }
-            }
+            <label>Организационно-правовая форма :</label>
+            <div>
+                <InputTextArea @bind-Value="@Company.LegalForm" />
+                <ValidationMessage For="@(() => Company.LegalForm)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Вид деятельности :</label>
+        <div>
+            <InputTextArea @bind-Value="@Company.ActivityType" />
+            <ValidationMessage For="@(() => Company.ActivityType)" />
         </div>
     </div>
     <button type="submit" class="btn btn-success">
@@ -59,16 +43,4 @@
     [Parameter] public string ButtonSuccessText { get; set; } = "Сохранить";
     [Parameter] public string ButtonCancelText { get; set; } = "Назад";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public IEnumerable<EmployeeModel> Employees { get; set; }
-
-
-    private void AddEmployee(MouseEventArgs e)
-    {
-        Company.Employees ??= new List<EmployeeModel>();
-        Company.Employees.Add(new EmployeeModel());
-    }
-
-    private void RemoveEmployee(MouseEventArgs e, EmployeeModel employee) {
-        Company.Employees?.Remove(employee);
-    }
 }

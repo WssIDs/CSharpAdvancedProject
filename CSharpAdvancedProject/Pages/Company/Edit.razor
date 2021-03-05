@@ -6,7 +6,7 @@
 @inject IEmployeeService EmployeeService
 
 <h3>Редактирование</h3>
-<Form Company="@_company" ButtonSuccessText="Изменить" Employees="@_employees" OnValidSubmit="@EditCompany"></Form>
+<Form Company="@_company" ButtonSuccessText="Изменить" OnValidSubmit="@EditCompany"></Form>
 
 @code {
 
@@ -20,7 +20,6 @@
         var id = Id ?? 0;
 
         _company = await CompanyService.GetAsync(id);
-        _employees = await GetEmployeesAsync();
     //}
     //catch (Exception ex)
     //{
@@ -35,12 +34,5 @@
 
         await CompanyService.UpdateAsync(_company);
         UriHelper.NavigateTo("company");
-    }
-
-    IEnumerable<EmployeeModel> _employees;
-
-    private async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
-    {
-        return await EmployeeService.GetAllAsync();
     }
 }

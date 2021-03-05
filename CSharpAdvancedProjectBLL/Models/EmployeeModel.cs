@@ -44,7 +44,7 @@ namespace CSharpAdvancedProjectBLL.Models
         /// <summary>
         /// Идентификатор компании
         /// </summary>
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         public CompanyModel Company { get; set; }
 

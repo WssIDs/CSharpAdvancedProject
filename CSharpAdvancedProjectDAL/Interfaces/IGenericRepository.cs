@@ -12,7 +12,7 @@ namespace CSharpAdvancedProjectDAL.Interfaces
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetAsync(int id);
         Task CreateAsync(TEntity entity);
-        Task UpdateAsync(int id, TEntity entity);
+        Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
     }
 }

@@ -46,7 +46,7 @@ namespace CSharpAdvancedProjectDAL.Entities
         /// <summary>
         /// Идентификатор компании
         /// </summary>
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         public Company Company { get; set; }
 
