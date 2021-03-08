@@ -4,12 +4,14 @@
 @inject NavigationManager UriHelper
 @inject ICompanyService CompanyService
 
-<h3>Create</h3>
+<Title Value="Добавить организацию"></Title>
+
+<h3>Добавить организацию</h3>
 <Form Company="@_company" OnValidSubmit="@CreateCompany"></Form>
 
 @code {
     
-    readonly CompanyModel _company = new CompanyModel();
+    readonly CompanyModel _company = new();
     async Task CreateCompany()
     {
 

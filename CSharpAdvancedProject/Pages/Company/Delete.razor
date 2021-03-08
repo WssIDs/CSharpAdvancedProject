@@ -1,0 +1,89 @@
+﻿@page "/company/delete/{Id:int}"
+@using CSharpAdvancedProjectBLL.Models
+@using CSharpAdvancedProjectBLL.Interfaces
+@inject NavigationManager UriHelper
+@inject ICompanyService CompanyService
+
+
+<Title Value="Удалить организацию"></Title>
+<h3>Удалить организацию</h3>
+
+@if (_isBusy)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <EditForm Model="@_company" OnValidSubmit="@DeleteCompany">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label>Наименование: </label>
+            <text>@_company.Name</text>
+        </div>
+        <div class="form-group">
+            <label>Максимальное кол-во сотрудников: </label>
+            <text>@_company.Size</text>
+        </div>
+        <div class="form-group">
+            <label>Организационно-правовая форма: </label>
+            <text>@_company.LegalForm</text>
+        </div>
+        <div class="form-group">
+            <label>Вид деятельности: </label>
+            <text>@_company.ActivityType</text>
+        </div>
+        <div class="form-group">
+            <label>Количество сотрудников: </label>
+            <text>@_company.Employees?.Count</text>
+        </div>
+        <button type="submit" class="btn btn-danger">
+            Удалить
+        </button>
+        <a class="btn btn-dark" href="company">Отмена</a>
+    </EditForm>
+}
+@if (_deleteFailed)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        @_error
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    bool _isBusy;
+    bool _deleteFailed;
+    string _error;
+    CompanyModel _company = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = Id ?? 0;
+
+        _company = await CompanyService.GetAsync(id);
+    }
+
+    async Task DeleteCompany()
+    {
+        try
+        {
+            _isBusy = true;
+            _deleteFailed = false;
+            await CompanyService.DeleteAsync(_company.Id);
+            UriHelper.NavigateTo("company");
+        }
+        catch (Exception ex)
+        {
+            _deleteFailed = true;
+            _error = ex.GetBaseException().Message;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

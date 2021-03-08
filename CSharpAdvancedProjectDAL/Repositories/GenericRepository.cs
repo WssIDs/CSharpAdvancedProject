@@ -13,7 +13,7 @@ namespace CSharpAdvancedProjectDAL.Repositories
     /// Generic репозиторий
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class GenericRepository<TEntity> : IDisposable, IGenericRepository<TEntity> where TEntity : class, IEntity
+    public sealed class GenericRepository<TEntity> : IDisposable, IGenericRepository<TEntity> where TEntity : class, IEntity
     {
         private readonly EmployeeContext _context;
         private bool _disposed;
@@ -25,20 +25,18 @@ namespace CSharpAdvancedProjectDAL.Repositories
 
         public IQueryable<TEntity> GetAll()
         {
-            return _context.Set<TEntity>()
-                .AsNoTracking();
+            return _context.Set<TEntity>();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _context.Set<TEntity>()
-                .AsNoTracking().ToListAsync();
+                .ToListAsync();
         }
 
         public async Task<TEntity> GetAsync(int id)
         {
             return await _context.Set<TEntity>()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
@@ -50,6 +48,18 @@ namespace CSharpAdvancedProjectDAL.Repositories
 
         public async Task UpdateAsync(TEntity entity)
         {
+            var local = await _context.Set<TEntity>()
+                .FindAsync(entity.Id);
+
+            if (local != null)
+            {
+                // detach
+                _context.Entry(local).State = EntityState.Detached;
+            }
+
+            // set Modified flag in your entry
+            _context.Entry(entity).State = EntityState.Modified;
+
             _context.Set<TEntity>().Update(entity);
             await _context.SaveChangesAsync();
         }
@@ -61,7 +71,7 @@ namespace CSharpAdvancedProjectDAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {

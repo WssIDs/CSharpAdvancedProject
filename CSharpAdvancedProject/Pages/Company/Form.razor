@@ -5,33 +5,25 @@
     <DataAnnotationsValidator />
     <div class="form-group">
         <label>Наименование организации :</label>
-        <div>
-            <InputText @bind-Value="@Company.Name" />
+        <InputText class="form-control" @bind-Value="@Company.Name" />
             <ValidationMessage For="@(() => Company.Name)" />
-        </div>
     </div>
     <div class="form-group">
         <label>Максимальное кол-во сотрудников :</label>
-        <div>
-            <InputNumber @bind-Value="@Company.Size" />
+        <InputNumber class="form-control" @bind-Value="@Company.Size" />
             <ValidationMessage For="@(() => Company.Size)" />
-        </div>
     </div>
     <div class="form-group ">
         <div>
             <label>Организационно-правовая форма :</label>
-            <div>
-                <InputTextArea @bind-Value="@Company.LegalForm" />
+            <InputTextArea class="form-control" @bind-Value="@Company.LegalForm" />
                 <ValidationMessage For="@(() => Company.LegalForm)" />
-            </div>
         </div>
     </div>
     <div class="form-group">
         <label>Вид деятельности :</label>
-        <div>
-            <InputTextArea @bind-Value="@Company.ActivityType" />
+        <InputTextArea class="form-control" @bind-Value="@Company.ActivityType" />
             <ValidationMessage For="@(() => Company.ActivityType)" />
-        </div>
     </div>
     <button type="submit" class="btn btn-success">
         @ButtonSuccessText

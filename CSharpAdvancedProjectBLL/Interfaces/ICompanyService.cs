@@ -15,5 +15,6 @@ namespace CSharpAdvancedProjectBLL.Interfaces
         Task<IEnumerable<CompanyModel>> GetAllAsync();
         Task UpdateAsync(CompanyModel company);
         Task CreateAsync(CompanyModel company);
+        Task DeleteAsync(int id);
     }
 }

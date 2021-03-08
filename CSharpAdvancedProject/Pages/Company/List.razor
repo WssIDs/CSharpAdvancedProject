@@ -4,14 +4,12 @@
 @using CSharpAdvancedProjectBLL.Models
 @inject ICompanyService CompanyService
 
-<Title Value="Cписок компаний"></Title>
+<Title Value="Cписок организаций"></Title>
 
-<h3>Компании</h3>
-<small>Добавить новую компанию в список</small>
+<h3>Организации</h3>
 <div class="form-group">
-    <a class="btn btn-success" href="company/create"><i class="oi oi-plus"></i> Добавить</a>
+    <a class="btn btn-success" href="company/create"><i class="oi oi-plus"></i> Новая организация</a>
 </div>
-<br>
 
 @if (Companies == null)
 {

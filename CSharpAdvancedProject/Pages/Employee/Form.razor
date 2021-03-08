@@ -1,74 +1,81 @@
 ﻿@using CSharpAdvancedProjectBLL.Models
 @using CSharpAdvancedProjectBLL.Interfaces
 
-<EditForm Model="@Company" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="@Employee" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="form-group">
-        <label>Наименование организации :</label>
+        <label>Фамилия</label>
         <div>
-            <InputText @bind-Value="@Company.Name" />
-            <ValidationMessage For="@(() => Company.Name)" />
+            <InputText class="form-control" @bind-Value="@Employee.Surname" />
+            <ValidationMessage For="@(() => Employee.Surname)" />
         </div>
     </div>
-    <div class="form-group ">
+    <div class="form-group">
+        <label>Имя</label>
         <div>
-            <label>Организационно-правовая форма :</label>
-            <div>
-                <InputText @bind-Value="@Company.LegalForm" />
-                <ValidationMessage For="@(() => Company.LegalForm)" />
-            </div>
+            <InputText class="form-control" @bind-Value="@Employee.FirstName" />
+            <ValidationMessage For="@(() => Employee.FirstName)" />
         </div>
     </div>
-    <div class="form-group ">
+    <div class="form-group">
+        <label>Отчество</label>
         <div>
-            <button class="btn btn-success" @onclick="@AddEmployee"><i class="oi oi-plus"></i> Добавить сотрудника</button>
-            <label>Сотрудники :</label>
-            <br />
-            @if (Company.Employees != null)
-            {
-                var i = 1;
-                @foreach (var employee in Company.Employees)
+            <InputText class="form-control" @bind-Value="@Employee.MiddleName" />
+            <ValidationMessage For="@(() => Employee.MiddleName)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Организация</label>
+        <div>
+            <InputSelect class="form-control" @bind-Value="@Employee.CompanyId">
+                <option value="">Выберите организацию</option>
+                @if (Companies != null)
                 {
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Сотрудник @i</label>
-                        </div>
-                        <InputSelect @bind-Value="employee.Id" class="form-control" id="inputGroupSelect01">
-                            @foreach (var emp in Employees)
-                            {
-                                <option value="@emp.Id">@emp.FirstName</option>
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => employee.Id)"/>
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" @onclick="@(e => RemoveEmployee(e, employee))"><i class="oi oi-delete"></i></button>
-                        </div>
-                    </div>
-                    i++;
+                    foreach (var company in Companies)
+                    {
+                        <option value="@company.Id">@company.Name</option>
+                    }
                 }
-            }
+            </InputSelect>
+            <ValidationMessage For="@(() => Employee.MiddleName)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Дата приема</label>
+        <div>
+            <InputDate class="form-control" @bind-Value="@Employee.EmploymentDate" />
+            <ValidationMessage For="@(() => Employee.EmploymentDate)" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Должность</label>
+            <div>
+                <InputSelect class="form-control" @bind-Value="@Employee.PositionId">
+                    <option value="0">Выберите должность</option>
+                    @if (Positions != null)
+                    {
+
+                        foreach (var position in Positions)
+                        {
+                            <option value="@position.Id">@position.Name</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Employee.PositionId)" />
+            </div>
         </div>
     </div>
     <button type="submit" class="btn btn-success">
         @ButtonSuccessText
     </button>
-    <a class="btn btn-dark" href="company">@ButtonCancelText</a>
+    <a class="btn btn-dark" href="employee">@ButtonCancelText</a>
 </EditForm>
 @code {
-    [Parameter] public CompanyModel Company { get; set; }
+    [Parameter] public EmployeeModel Employee { get; set; }
     [Parameter] public string ButtonSuccessText { get; set; } = "Сохранить";
     [Parameter] public string ButtonCancelText { get; set; } = "Назад";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public IEnumerable<EmployeeModel> Employees { get; set; }
-
-
-    private void AddEmployee(MouseEventArgs e)
-    {
-        Company.Employees ??= new List<EmployeeModel>();
-        Company.Employees.Add(new EmployeeModel());
-    }
-
-    private void RemoveEmployee(MouseEventArgs e, EmployeeModel employee) {
-        Company.Employees?.Remove(employee);
-    }
+    [Parameter] public IEnumerable<PositionModel> Positions { get; set; }
+    [Parameter] public IEnumerable<CompanyModel> Companies { get; set; }
 }

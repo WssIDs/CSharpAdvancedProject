@@ -5,7 +5,9 @@
 @inject ICompanyService CompanyService
 @inject IEmployeeService EmployeeService
 
-<h3>Редактирование</h3>
+<Title Value="Добавить организацию"></Title>
+
+<h3>Редактирование организации</h3>
 <Form Company="@_company" ButtonSuccessText="Изменить" OnValidSubmit="@EditCompany"></Form>
 
 @code {
@@ -15,19 +17,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //try
-        //{
         var id = Id ?? 0;
-
         _company = await CompanyService.GetAsync(id);
-    //}
-    //catch (Exception ex)
-    //{
-
-    //}
     }
 
-    CompanyModel _company = new CompanyModel();
+    CompanyModel _company = new();
 
     async Task EditCompany()
     {

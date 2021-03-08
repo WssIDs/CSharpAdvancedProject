@@ -1,4 +1,4 @@
-﻿@page "/employee/create"
+﻿@page "/employee/edit/{Id:int}"
 @using CSharpAdvancedProjectBLL.Models
 @using CSharpAdvancedProjectBLL.Interfaces
 @inject NavigationManager UriHelper
@@ -6,27 +6,32 @@
 @inject IEmployeeService EmployeeService
 @inject IPositionService PositionService
 
-<Title Value="Добавить сотрудника"></Title>
-<h3>Добавить сотрудника</h3>
+<Title Value="Изменить данные сотрудника"></Title>
+<h3>Изменить данные сотрудника</h3>
 
-<Form Employee="@_employee" OnValidSubmit="@CreateEmployee" Companies="@_companies" Positions="@_positions"></Form>
+<Form Employee="@_employee" OnValidSubmit="@UpdateEmployee" ButtonSuccessText="Изменить" Companies="@_companies" Positions="@_positions"></Form>
 
 @code {
 
+    [Parameter]
+    public int? Id { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        var id = Id ?? 0;
+
+        _employee = await EmployeeService.GetAsync(id);
+
         _companies = await GetCompaniesAsync();
         _positions = await GetPositionsAsync();
-
-        _employee.EmploymentDate = DateTime.Now;
     }
 
-    readonly EmployeeModel _employee = new();
+    EmployeeModel _employee = new();
 
-    async Task CreateEmployee()
+    async Task UpdateEmployee()
     {
-        await EmployeeService.CreateAsync(_employee);
-        UriHelper.NavigateTo("employee",true);
+        await EmployeeService.UpdateAsync(_employee);
+        UriHelper.NavigateTo("employee", true);
     }
 
     IEnumerable<CompanyModel> _companies;

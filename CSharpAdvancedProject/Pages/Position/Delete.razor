@@ -1,0 +1,72 @@
+﻿@page "/position/delete/{Id:int}"
+@using CSharpAdvancedProjectBLL.Models
+@using CSharpAdvancedProjectBLL.Interfaces
+@inject NavigationManager UriHelper
+@inject IPositionService PositionService
+
+<Title Value="Удалить должность"></Title>
+<h3>Удалить должность</h3>
+
+@if (_isBusy)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <EditForm Model="@_position" OnValidSubmit="@DeletePosition">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label>Наименование должности: </label>
+            <text>@_position.Name</text>
+        </div>
+        <button type="submit" class="btn btn-danger">
+            Удалить
+        </button>
+        <a class="btn btn-dark" href="position">Отмена</a>
+    </EditForm>
+}
+@if (_deleteFailed)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        @_error
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    bool _isBusy;
+    bool _deleteFailed;
+    string _error;
+    PositionModel _position = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = Id ?? 0;
+
+        _position = await PositionService.GetAsync(id);
+    }
+
+    async Task DeletePosition()
+    {
+        try
+        {
+            _isBusy = true;
+            _deleteFailed = false;
+            await PositionService.DeleteAsync(_position.Id);
+            UriHelper.NavigateTo("position");
+        }
+        catch (Exception ex)
+        {
+            _deleteFailed = true;
+            _error = ex.GetBaseException().Message;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

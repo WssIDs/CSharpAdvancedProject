@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CSharpAdvancedProjectBLL.Interfaces;
@@ -42,7 +40,7 @@ namespace CSharpAdvancedProjectBLL.Services
                 .ToListAsync());
         }
 
-        public async Task Create(EmployeeModel employee)
+        public async Task CreateAsync(EmployeeModel employee)
         {
             await _database.Employees.CreateAsync(_mapper.Map<Employee>(employee));
         }
@@ -50,6 +48,16 @@ namespace CSharpAdvancedProjectBLL.Services
         public async Task<EmployeeModel> GetAsync(int id)
         {
             return _mapper.Map<EmployeeModel>(await _database.Employees.GetAsync(id));
+        }
+
+        public async Task UpdateAsync(EmployeeModel employee)
+        {
+            await _database.Employees.UpdateAsync(_mapper.Map<Employee>(employee));
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _database.Employees.DeleteAsync(id);
         }
     }
 }

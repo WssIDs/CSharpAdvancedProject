@@ -8,21 +8,21 @@ namespace CSharpAdvancedProjectBLL.Models
         /// <summary>
         /// Фамилия
         /// </summary>
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "Поле Фамилия является обязательным")]
+        [StringLength(50, ErrorMessage = "Максимальная длина поля Фамилия не может быть больше 50 символов")]
         public string Surname { get; set; }
 
         /// <summary>
         /// Имя
         /// </summary>
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "Поле Имя является обязательным")]
+        [StringLength(50, ErrorMessage = "Максимальная длина поля Имя не может быть больше 50 символов")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Отчество
         /// </summary>
-        [StringLength(50)]
+        [StringLength(50, ErrorMessage = "Максимальная длина поля Отчество не может быть больше 50 символов")]
         public string MiddleName { get; set; }
 
         /// <summary>
@@ -34,6 +34,7 @@ namespace CSharpAdvancedProjectBLL.Models
         /// <summary>
         /// 
         /// </summary>
+        [Range(1, int.MaxValue, ErrorMessage = "Требуется указать должность сотрудника")]
         public int PositionId { get; set; }
 
         /// <summary>

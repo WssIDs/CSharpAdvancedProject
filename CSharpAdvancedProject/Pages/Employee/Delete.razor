@@ -1,0 +1,93 @@
+﻿@page "/employee/delete/{Id:int}"
+@using CSharpAdvancedProjectBLL.Models
+@using CSharpAdvancedProjectBLL.Interfaces
+@inject NavigationManager UriHelper
+@inject IEmployeeService EmployeeService
+
+
+<Title Value="Удалить сотрудника"></Title>
+<h3>Удалить сотрудника</h3>
+
+@if (_isBusy)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <EditForm Model="@_employee" OnValidSubmit="@DeleteEmployee">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label>Фамилия: </label>
+            <text>@_employee.Surname</text>
+        </div>
+        <div class="form-group">
+            <label>Имя: </label>
+            <text>@_employee.FirstName</text>
+        </div>
+        <div class="form-group">
+            <label>Отчество: </label>
+            <text>@_employee.MiddleName</text>
+        </div>
+        <div class="form-group">
+            <label>Должность: </label>
+            <text>@_employee.Position?.Name</text>
+        </div>
+        <div class="form-group">
+            <label>Дата приема: </label>
+            <text>@_employee.EmploymentDate.ToString("d")</text>
+        </div>
+        <div class="form-group">
+            <label>Организация: </label>
+            <text>@_employee.Company?.Name</text>
+        </div>
+        <button type="submit" class="btn btn-danger">
+            Удалить
+        </button>
+        <a class="btn btn-dark" href="employee">Отмена</a>
+    </EditForm>
+}
+@if (_deleteFailed)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        @_error
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    bool _isBusy;
+    bool _deleteFailed;
+    string _error;
+    EmployeeModel _employee = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = Id ?? 0;
+
+        _employee = await EmployeeService.GetAsync(id);
+    }
+
+    async Task DeleteEmployee()
+    {
+        try
+        {
+            _isBusy = true;
+            _deleteFailed = false;
+            await EmployeeService.DeleteAsync(_employee.Id);
+            UriHelper.NavigateTo("employee");
+        }
+        catch (Exception ex)
+        {
+            _deleteFailed = true;
+            _error = ex.GetBaseException().Message;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

@@ -34,9 +34,24 @@ namespace CSharpAdvancedProjectBLL.Services
             return _mapper.Map<IEnumerable<PositionModel>>(await _database.Positions.GetAll().ToListAsync());
         }
 
+        public async Task<PositionModel> GetAsync(int id)
+        {
+            return _mapper.Map<PositionModel>(await _database.Positions.GetAsync(id));
+        }
+
         public async Task CreateAsync(PositionModel position)
         {
             await _database.Positions.CreateAsync(_mapper.Map<Position>(position));
+        }
+
+        public async Task UpdateAsync(PositionModel position)
+        {
+            await _database.Positions.UpdateAsync(_mapper.Map<Position>(position));
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _database.Positions.DeleteAsync(id);
         }
     }
 }

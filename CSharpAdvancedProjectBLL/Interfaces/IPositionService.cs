@@ -12,6 +12,9 @@ namespace CSharpAdvancedProjectBLL.Interfaces
     public interface IPositionService
     {
         Task<IEnumerable<PositionModel>> GetAllAsync();
+        Task<PositionModel> GetAsync(int id);
         Task CreateAsync(PositionModel position);
+        Task UpdateAsync(PositionModel position);
+        Task DeleteAsync(int id);
     }
 }

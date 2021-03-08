@@ -12,7 +12,9 @@ namespace CSharpAdvancedProjectBLL.Interfaces
     public interface IEmployeeService
     {
         Task<IEnumerable<EmployeeModel>> GetAllAsync();
-        Task Create(EmployeeModel company);
+        Task CreateAsync(EmployeeModel company);
         Task<EmployeeModel> GetAsync(int id);
+        Task UpdateAsync(EmployeeModel employee);
+        Task DeleteAsync(int id);
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using CSharpAdvancedProjectBLL.Interfaces;
 using CSharpAdvancedProjectBLL.Models;
 using CSharpAdvancedProjectDAL.Entities;
@@ -51,6 +48,11 @@ namespace CSharpAdvancedProjectBLL.Services
         public async Task CreateAsync(CompanyModel company)
         {
             await _database.Companies.CreateAsync(_mapper.Map<Company>(company));
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _database.Companies.DeleteAsync(id);
         }
     }
 }
